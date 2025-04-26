@@ -25,3 +25,4 @@ def register_face():
     cv2.destroyAllWindows()
 
     return f"Face registered successfully and saved to {save_path}."
+
