@@ -1,0 +1,5 @@
+flask
+face-recognition
+opencv-python
+numpy
+# (add any other libraries you are using)
