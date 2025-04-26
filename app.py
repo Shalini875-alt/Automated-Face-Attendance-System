@@ -1,10 +1,36 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for
+import face_recognition
+import face_registration
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Hello! This is the Automated Face Attendance System."
+    return "Welcome to the Automated Face Attendance System!"
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        # Call your face_registration function
+        result = face_registration.register_face()
+        return f"Registration Completed: {result}"
+    return '''
+        <form method="POST">
+            <button type="submit">Register Face</button>
+        </form>
+    '''
+
+@app.route('/recognize', methods=['GET', 'POST'])
+def recognize():
+    if request.method == 'POST':
+        # Call your face_recognition function
+        result = face_recognition.recognize_face()
+        return f"Recognition Result: {result}"
+    return '''
+        <form method="POST">
+            <button type="submit">Recognize Face</button>
+        </form>
+    '''
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
