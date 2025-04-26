@@ -1,43 +1,27 @@
 import cv2
 import os
 
-# Create the 'faces' directory if it doesn't exist
-if not os.path.exists("faces"):
-    os.makedirs("faces")
+def register_face():
+    # Create a directory to save registered faces if it doesn't exist
+    save_dir = 'known_faces'
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
 
-# Initialize webcam
-cap = cv2.VideoCapture(0)
+    video_capture = cv2.VideoCapture(0)
 
-# Ask for the person's name
-name = input("Enter person's name: ")
-image_path = f"faces/{name}.jpg"
+    if not video_capture.isOpened():
+        return "Failed to open camera."
 
-print("Capturing face... Look at the camera.")
+    ret, frame = video_capture.read()
 
-# Load face detection model
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-
-while True:
-    ret, frame = cap.read()
     if not ret:
-        print("Failed to capture image.")
-        break
+        return "Failed to capture image from camera."
 
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # Convert to grayscale
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)  # Detect faces
+    # Save the captured image
+    save_path = os.path.join(save_dir, 'known.jpg')
+    cv2.imwrite(save_path, frame)
 
-    for (x, y, w, h) in faces:
-        face = frame[y:y + h, x:x + w]  # Crop the detected face
-        cv2.imwrite(image_path, face)  # Save face image
-        print(f"Face image saved as {image_path}")
-        cap.release()
-        cv2.destroyAllWindows()
-        exit()
+    video_capture.release()
+    cv2.destroyAllWindows()
 
-    cv2.imshow("Face Registration", frame)
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):  # Press 'q' to quit
-        break
-
-cap.release()
-cv2.destroyAllWindows()
+    return f"Face registered successfully and saved to {save_path}."
