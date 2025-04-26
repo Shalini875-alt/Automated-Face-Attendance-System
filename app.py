@@ -11,9 +11,9 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        # Call your face_registration function
+        # Call the face_registration function
         result = face_registration.register_face()
-        return f"Registration Completed: {result}"
+        return render_template('result.html', result=result)
     return '''
         <form method="POST">
             <button type="submit">Register Face</button>
@@ -23,9 +23,9 @@ def register():
 @app.route('/recognize', methods=['GET', 'POST'])
 def recognize():
     if request.method == 'POST':
-        # Call your face_recognition function
+        # Call the face_recognition function
         result = face_recognition.recognize_face()
-        return f"Recognition Result: {result}"
+        return render_template('result.html', result=result)
     return '''
         <form method="POST">
             <button type="submit">Recognize Face</button>
@@ -34,3 +34,4 @@ def recognize():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
